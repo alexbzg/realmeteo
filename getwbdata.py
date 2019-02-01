@@ -37,7 +37,8 @@ for entry in listdir(data_dir):
             json_file.write(rsp)
         rsp_json = json.loads(rsp)
         if rsp_json and rsp_json.has_key('data'):
-            return rsp_json['data']
+            return rsp_json['data'][0] if len(rsp_json['data']) == 1\
+                else rsp_json['data']
         else:
             return None
 
