@@ -195,7 +195,7 @@ def process( params ):
                 data['temperature'] = params['data']['temp']
                 data['humidity'] = params['data']['rh']
                 data['wind_dir'] = params['data']['wind_cdir']
-                data['wind_speed_avg'] = params['data']['wind_spd']
+                data['wind_speed_avg'] = round(params['data']['wind_spd'], 1)
                 data['pressure'] = round(params['data']['pres'] * 0.75, 1)
                 data['uv'] = params['data']['uv']
                 data['solar_rad'] = params['data']['solar_rad']
