@@ -10,7 +10,7 @@ from dateutil.parser import parse
 conf = rmconfig()
 txt = urllib2.urlopen( conf.get( 'geomagnet', 'url' ) ).readlines()
 reH = re.compile( '^NOAA Kp index breakdown (\w+ \d+)-(\w+ \d+) (\d\d\d\d)' )
-reL = re.compile( '^(\d\d)-(\d\d)UT +(\d) .+ (\d) .+ (\d)' )
+reL = re.compile( '^(\d\d)-(\d\d)UT +(\d\.\d\d) .+ (\d\.\d\d) .+ (\d\.\d\d)' )
 start = None
 data = []
 for line in txt:
@@ -30,7 +30,7 @@ for line in txt:
                 dt = start + timedelta( days = c )
                 item['beginning'] = toEpoch( dt.replace( hour = int( m.group( 1 ) ) ) )
                 item['end'] = item['beginning'] + 10800
-                item['value'] = int( m.group( 3 + c ) )
+                item['value'] = round(float( m.group( 3 + c ) ))
                 data.append( item )
 
 json.dump( data, open( conf.get( 'site', 'path' ) + '/geomagnet.json', 'w' ) )
