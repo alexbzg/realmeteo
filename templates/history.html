@@ -1,0 +1,15 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+    <div id="years">
+        <span class="year" ng-repeat="item in history" ng-click="loadYear(item)" 
+            ng-class="{'clickable': item != year }">{[item]}</span>
+    </div>
+
+    <div id="navigator_container" style="width:1098px; height:100px" class="chart_container">
+    </div>
+
+    <div id="chart_{[chart.name]}_container" ng-show="chart.enabled" 
+        ng-repeat="chart in charts" style="width:1098px; height:300px" class="chart_container">
+    </div>
+{% endblock content %}
+

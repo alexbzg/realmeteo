@@ -1,0 +1,78 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" land="ru" xml:lang="en" ng-app="indexApp">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Language" content="ru-ru"/>
+        <meta name="description" content="Погода в режиме реального времени. Данные с цифровых метеостанций." />
+        <meta name="keywords" content="погода, метеоданные, давление, влажность, ветер, сейчас" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Реальная погода</title>
+
+		<link rel="icon" href="/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		
+		<link href="index_style.css" rel="stylesheet" type="text/css" />
+	    <!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script-->
+        <!--script src="/.js/index.js"></script-->
+	
+</head>
+<body ng-controller="IndexCtrl">
+
+	<div class="list">	
+		<div id="logo">
+			Сбор данных о погоде осуществляется сертифицированными цифровыми метеостанциями в режиме реального времени. Графики изменения метеопараметров формируются и передаются в Интернет автоматически.
+		</div>
+        {% for cityType in cities %}
+        <table>
+            <tr>
+                {% for column in cityType | slice( 3 ) %}
+                <td>
+                    <div class="city_column">
+                        {% for city in column %}
+                        <p {% if city.firstLetter %} class="firstLetter" {% endif %} >
+                        <a href="/{{city.id}}/1/current" title="{{city.stations[0].name}}">
+                                {{city.name + ( ' 1' if ( city.stations | length > 1 ) else '' )}}
+                            </a>&nbsp;
+                            {% if city.stations | length > 1 %}
+                                {% for station in city.stations[1:] %}
+                                    <span>
+                                        <a href="/{{city.id}}/{{station.number}}/current"
+                                           title="{{station.name}}">
+                                            &nbsp;{{station.number}}
+                                        </a>
+                                        <span>&nbsp;</span>
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </p>
+                        {% endfor %}
+                    </div>
+                </td>
+                {% endfor %}
+            </tr>
+        </table>
+        <hr />
+        {% endfor %}
+
+        <div id="welcome_link">
+            Хотите подключиться к RealMeteo? <img src="/.images/look.gif"> <a href="/welcome.html">Добро пожаловать!</a>
+        </div>
+        <hr/>
+
+        <div id="real_info">Информация на страницах сайта realmeteo.ru предоставлена только для ознакомительных целей и не может быть использована для планирования или проведения мероприятий, реализация которых связана с риском материальных потерь или человеческих жертв. Для получения официальной информации следует обращаться в соответствующие структурные подразделения федеральной метеослужбы.</div>
+
+	</div>
+    <script type="text/javascript">
+        var extData = {
+            cities: {{ cities | json }} };
+    </script>
+
+    <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter32441360 = new Ya.Metrika({ id:32441360, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/32441360" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+
+</body>
+</html>
+
+
+
+
+

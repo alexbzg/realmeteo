@@ -24,6 +24,7 @@ argparser.add_argument( '-t', action = 'store_true' )
 argparser.add_argument( 'template', nargs = '?', default = 'current' )
 args = vars( argparser.parse_args() )
 postfix = '_t' if args['t'] else ''
+extraLinks = loadJSON(sitePath + '/extraLinks.json')
 
 for cityId in listdir( citiesPath ):
 
@@ -51,7 +52,7 @@ for cityId in listdir( citiesPath ):
         if args['template'] == 'history' and not history:
             continue
         extData = { 'city': city, 'station': station, 'stations': stations,\
-            'history': history }
+                'history': history, 'extra_links': extraLinks }
         if args['template'] == 'current':
             if city.has_key( 'forecast_path' ) and city['forecast_path']:
                 forecast = loadJSON( sitePath + city['forecast_path'] )

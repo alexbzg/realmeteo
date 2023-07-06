@@ -1,0 +1,278 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+
+    <table id="realdata_mobile">
+        <tr>
+            <td rowspan="3" id="weathericon_wind">
+                <img src="/.images/weather_icons/128x128/{[current.icon]}.png"
+                    ng-show="current.icon"/>
+                {% if current.wind_dir %}
+                    <div id="winddir_mobile"
+                        style="background:url('/.images/wind150x150/background_mobile{{current.wind_0}}.png') no-repeat top left;">
+                        <div id="wind_arrow_mobile">
+                            <img src="/.images/wind150x150/{{current.wind_dir
+                                if current.wind_speed_avg and current['wind_speed_avg'] > 0
+                                and current.wind_dir else '0'}}.png"/>
+                        </div>
+                    </div>
+                {% endif %}
+            </td>
+            <td class="meteodata" id="col1">
+                {{current.temperature}}<span>°C</span><br/>
+                <span class="meteodata_descr">температура</span>
+            </td>
+            <td class="meteodata grey" id="col2">
+                {% if current.windchill != none %}
+                    {{current.windchill}}<span>°C</span><br/>
+                    <span class="meteodata_descr">ощущаемая</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="meteodata">
+                {{current.pressure}}<br/>
+                <span>мм.рт.ст.</span><br/>
+                <span class="meteodata_descr">давление</span>
+            </td>
+            <td class="meteodata">
+                {% if current.humidity != none %}
+                    {{current.humidity}}<span>%</span><br/>
+                    <span class="meteodata_descr">влажность</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="meteodata" colspan="2">
+                {{current.wind_speed_avg}}<span>м/с {{current.wind_dir_ru}}</span>
+            </td>
+        </tr>
+    </table>
+
+    <table id="realdata">
+        <tr>
+            <td rowspan="6" id="weathericon_wind">
+                <img ng-src="/.images/weather_icons/128x128/{[current.icon]}.png"
+                    width='128' height='128' ng-show="current.icon"/>
+                {% if current.wind_dir %}
+                    <div id="winddir" style="background:url(
+                    '/.images/wind150x150/background{{current.wind_0}}.png')
+                    no-repeat top left;">
+                        <div id="wind_help" style="display: none;">
+                            Стрелка указывает, КУДА ДУЕТ ветер
+                        </div>
+                        <div id="wind_arrow">
+                            <img src="/.images/wind150x150/{{current.wind_dir
+                                if current.wind_speed_avg and current['wind_speed_avg'] > 0
+                                and current.wind_dir else '0'}}.png"/>
+                        </div>
+                    </div>
+                {% endif %}
+            </td>
+            <td class="meteodata">{{current.temperature}}<span>°C</span></td>
+            <td class="meteodata_small">
+                {% if current.windchill != none %}
+                {{current.windchill}}<span>°C</span>
+                {% endif %}
+            </td>
+
+            <td rowspan="7" id="holidays">
+                <a href=http://www.calend.ru target=_blank>
+                    <img src=http://www.calend.ru/img/export/informer.png width=189
+                    alt="Праздники сегодня" border=0>
+                </a>
+            </td>
+
+            <td rowspan="7" id="ads" >
+                <ng-include src="adsrc">
+                </ng-include>
+            </td>
+        </tr>
+        <tr>
+            <td class="meteodata_descr">температура воздуха</td>
+            <td class="meteodata_descr">
+                {% if current.windchill != none %}
+                ощущаемая температура
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="meteodata">{{current.pressure}}<span>мм.рт.ст.</span></td>
+            <td class="meteodata">
+                {% if current.humidity != none %}
+                {{current.humidity}}<span>%</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="meteodata_descr">атмосферное давление</td>
+            <td class="meteodata_descr">
+                {% if current.humidity != none %}
+                относительная влажность
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="meteodata">{{current.wind_speed_avg}}
+                <span>м/с {{current.wind_dir_ru}}</span>
+            </td>
+            <td rowspan="2" >
+                <div id="city_links">
+                    <a target="_blank" href="https://yandex.ru/pogoda/{{city.id}}/maps/nowcast">Карта осадков</a><br/>
+                    <a target="_blank" href="http://earth.nullschool.net/#current/wind/surface/level/orthographic=-295.63,56.66,563">Карта ветра</a><br/>
+                    {% if city.radar %}
+                        <a href="{{city.radar}}" target="_blank">Метеорадар</a><br/>
+                    {% endif %}
+                    {% if not city.foreign %}
+                        <a target="_blank" href="{{extra_links['BlackSea'].url}}">
+                            {{extra_links['BlackSea'].title}}
+                        </a><br/>                        
+                    {% endif %}
+                </div>
+                <table id="moon">
+                    <tr>
+                        <td colspan="2" class="sun header">солнце</td>
+                    </tr>
+                    <tr>
+                        <td class="sun">{{city.astro.sun.today.rise.time}}</td>
+                        <td class="sun">{{city.astro.sun.today.set.time}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="header">{{city.astro.moon.desc}} луна</td>
+                    </tr>
+                    <tr>
+                        <td>{{city.astro.moon.rise.time}}</td>
+                        <td>{{city.astro.moon.set.time}}</td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+        <tr>
+            <td  class="meteodata_descr">
+                скорость ветра<br/><br/>
+            </td>
+        </tr>
+
+        <tr>
+            <td id="social" colspan="3">
+                <div class="social-likes">
+                    <div class="vkontakte" title="Поделиться ссылкой во Вконтакте">Вконтакте</div>
+                    <div class="odnoklassniki"
+                        title="Поделиться ссылкой в Одноклассниках">
+                        Одноклассники
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+	<div id="forecast" ng-show="forecast">
+        <h3>Прогноз погоды в {{city.prep}}</h3>
+        <div id="tab24" class="tab" ng-class="{active_tab: activeForecast == 'hourly'}"
+                                    ng-click="activeForecast = 'hourly'"
+                                    ng-show=" forecast.hourly.length > 0 ">24 часа</div>
+		<div id="tab10" class="tab" ng-class="{active_tab: activeForecast == 'daily'}"
+            ng-click="activeForecast = 'daily'">10 дней</div>
+		<div id="tabPrevYear" class="tab" ng-show="prevYearUrl">
+            <a ng-href="{[prevYearUrl]}">погода год назад</a>
+        </div>
+
+		<div id="after_tabs">&nbsp;</div>
+
+		<table id="forecast10" ng-show="activeForecast == 'daily'">
+			<tr>
+                <td class="day" ng-repeat-start="day in forecast.daily"
+                    ng-class="{ weekend: day.weekend }">
+                    {[day.dow]}<br/><span ng-bind-html="day.date"></span><br/>
+                    <img ng-src="/.images/weather_icons/64x64/{[day.icon]}.png"/><br/>
+                    <img ng-if="day.pop > 0" ng-src="/.images/forecast_{[day.snow ?
+                        'snow' : 'rain']}/{[day.pop]}.png"
+                        title="Вероятность осадков - {[day.pop]}%" /><br/>
+                        <img ng-src="/.images/forecast_magnet/magnet{[day.geomagnet]}.png"
+                             title="{[geomagnetCaptions[day.geomagnet]]}"/>
+                </td>
+                <td ng-repeat-end class="night"></td>
+            </tr>
+	    	<tr>
+				<td colspan="20" id="weather_graph">
+                    <div id="forecast_daily_temp_graph_container" style="width:1098px;height:150px">
+                    </div>
+				</td>
+			</tr>
+            <tr>
+				<td colspan="20" id="wind_graph">
+	                <div id="forecast_daily_wind_graph_container" style="width:1098px;height:100px">
+                    </div>
+			    </td>
+			</tr>
+            <tr class="wind_dir">
+				<td class="day" ng-repeat-start="day in forecast.daily">
+                    <img ng-src="/.images/forecast_wind/{[day.wind_dir]}.png" ng-if="day.wind_dir"/>
+                </td>
+                <td class="night" ng-repeat-end></td>
+  			</tr>
+	</table>
+
+
+    <table id="forecast24" ng-show="activeForecast == 'hourly'">
+        <tr>
+            <td ng-repeat="hour in forecast.hourly_show" ng-class="hour.night">
+                {[hour.time]}<br/>
+                <img ng-src="/.images/weather_icons/64x64/{[hour.iconPrefix + hour.icon]}.png"/>
+                <img ng-if="hour.pop > 0" ng-src="/.images/forecast_{[hour.snow ?
+                    'snow' : 'rain']}/{[hour.pop]}.png"
+                    title="Вероятность осадков - {[hour.pop]}%" />
+                <img ng-src="/.images/forecast_magnet/magnet{[hour.geomagnet]}.png"
+                    title="{[geomagnetCaptions[hour.geomagnet]]}"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12" id="weather_graph">
+                <div id="forecast_hourly_temp_graph_container" style="width:1098px; height:150px"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12" id="wind_graph">
+                <div id="forecast_hourly_wind_graph_container" style="width:1098px; height:100px"></div>
+           </td>
+        </tr>
+        <tr class="wind_dir">
+            <td ng-repeat="hour in forecast.hourly_show">
+                <img ng-src="/.images/forecast_wind/{[hour.wind_dir]}.png"/>
+            </td>
+        </tr>
+    </table>
+	</div>
+
+    <div id="webcams">
+        <ng-include src="'../webcams.html'">
+        </ng-include>
+    </div>
+
+    <div id="horizontal">
+        <ng-include src="'/horizontal/index.html'">
+        </ng-include>
+    </div>
+
+
+    <div id="chart_{[chart.name]}_container" ng-show="chart.enabled"
+        ng-repeat-start="chart in charts" style="width:1098px; height:300px" class="chart_container">
+    </div>
+    <div id="chart_{[chart.name]}_container0" ng-show="0"
+        ng-repeat-end style="width:1098px; height:300px" class="chart_container">
+    </div>
+
+    <div id="holidays_mobile">
+        <a href="http://www.calend.ru" target="_blan"k>
+            <img src="http://www.calend.ru/img/export/informer.png" width="189"
+                lt="Праздники сегодня" border="0">
+        </a>
+    </div>
+{% endblock content %}
+
+
+
+
+
+
+

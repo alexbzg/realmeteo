@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h4>Погодный информер от Realmeteo</h4>
+    <div id="informer_text">
+        Уважаемые владельцы сайтов и блогов, у вас есть возможность установить на ваших страницах
+        наш погодный информер. Информер представляет собой картинку в формате png и может 
+        использоваться как на сайтах, так и в блогах, где запуск скриптов обычно не разрешен.
+        Для установки погодного информера скопируйте нижепреведенный код и вставьте его в код
+        страницы своего блога или сайта.
+    </div>
+    <table id="informer_table">
+        {% for informer in ( {'name': 'realmeteo1', 'height': 150, 'width': 150 },
+            { 'name': 'realmeteo2', 'height': 70, 'width': 150 }, 
+            { 'name': 'info2', 'height': 100, 'width': 100 }, 
+            { 'name': 'info4', 'height': 77, 'width': 162 } ) %}
+        <tr>
+            <td class="image"><img src="/{{city.id}}/{{station.number}}/{{informer.name}}.png"/></td>
+            <td class="code">
+                <textarea rows="4" cols="100">&lt;a href="http://realmeteo.ru/{{city.id}}/{{station.number}}" target="_blank"&gt;&lt;img src="http://realmeteo.ru/{{city.id}}/{{station.number}}/{{informer.name}}.png" border="0" width="{{informer.width}}" height="{{informer.height}}" title="Реальная погода в {{city.prep}}"/&gt;&lt;/a&gt;</textarea>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock content %}

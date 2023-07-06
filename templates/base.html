@@ -1,0 +1,163 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" land="ru" xml:lang="en" ng-app="rmApp">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Language" content="ru-ru"/>
+        <meta name="description" content="Данные с цифровых метеостанций. Прогноз на 24 часа и на 10 дней. Вебкамеры. Архив погоды." />
+        <meta name="keywords" content="погода, {{city.name}}, метеостанция, температура, давление, влажность, ветер, прогноз" />
+        {% set titles = { 'current': 'Реальная погода', 'history': 'Архив погоды',
+            'informers': 'Погодные информеры' } %}
+        <title>{{titles[template_type]}} в {{city.prep}}</title>
+        <link href="/style.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/.js/social-likes_birman.css">
+        <link rel="apple-touch-icon" sizes="192x192" href="/.images/favicons/favicon-192x192.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/.images/favicons/favicon-192x192.png">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <meta name="msapplication-config" content="/browserconfig.xml">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta property="og:image" content="http://realmeteo.ru/.images/favicons/favicon-96x96.png" />
+        <style>
+            [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+                  display: none !important;
+            }
+        </style>
+        <!-- Yandex.RTB -->
+        <script>window.yaContextCb=window.yaContextCb||[]</script>
+        <script src="https://yandex.ru/ads/system/context.js" async></script>
+
+    </head>
+    <body ng-controller="pageCtrl" ng-cloak>
+
+    <div id="menu" style="display: none;">
+        <a href="/">Города</a> &nbsp;&nbsp;&nbsp;
+        <a href="current">Погода сейчас</a> &nbsp;&nbsp;&nbsp;
+        <a href="history">Архив погоды</a> &nbsp;&nbsp;&nbsp;
+        <a href="informers">Информеры</a> &nbsp;&nbsp;&nbsp;
+        <a href="/links.html">Ссылки</a>
+        <div id="menu_close_link">Х</div>
+    </div>
+
+    <div id="content">
+        <div id="list">
+
+            <table id="city_info_mobile">
+                <tr>
+                    <td id="city">
+                        <h1>{{city.name}}</h1>
+                    </td>
+                    <td id="home_link">
+                        <a href="/"><img src="/.images/icon_menu.png" border="0" /></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="city_stations" colspan="2">
+                        {{station.desc}}<br/>
+                            {% if (stations|length) > 1 %}
+                                &nbsp;
+                                {% for stationItem in stations %}
+                                    &nbsp;&nbsp;
+                                    {% if stationItem.number == station.number %}
+                                        {{stationItem.number}}
+                                    {% else %}
+                                        <a href="../{{stationItem.number}}/{{template_type}}{[params]}"
+                                        title="{{stationItem.name}}">{{stationItem.number}}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                </tr>
+                {% if template_type == 'current' %}
+                    <tr>
+                        <td id="date_time" colspan="2">
+                            <b>{{current.day}} {{current.month}} {{current.year}} г.</b>
+                            {{current.time}}
+                            <br ng-show="timeout"/><img src="/.images/station_out.gif" ng-show="timeout"/>
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
+
+            <table id="city_info">
+                <tr>
+                    <td id="date_time">
+                        {% if template_type == 'current' %}
+                        <b>{{current.day}} {{current.month}} {{current.year}} г.</b>
+                        <br/>{{current.time}}
+                             <br ng-show="timeout"/><img src="/.images/station_out.gif" ng-show="timeout"/>
+                        {% endif %}
+                    </td>
+                    <td id="city">
+                        <h1>{{city.name}}</h1>
+                        <span class="grey">{{station.desc}}</span>
+                        <div id="stations_map">
+                            {% if (stations|length) > 1 %}
+                                &nbsp;
+                                {% for stationItem in stations %}
+                                    &nbsp;&nbsp;
+                                    {% if stationItem.number == station.number %}
+                                        {{stationItem.number}}
+                                    {% else %}
+                                    <a href="../{{stationItem.number}}/{{template_type}}{[params]}"
+                                        title="{{stationItem.name}}">{{stationItem.number}}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            <!--a href="#">На карте</a-->
+                        </div>
+                    </td>
+                    <td id="menu_link">
+                        <img src="/.images/icon_menu.png"/><br/>меню
+                    </td>
+                </tr>
+            </table>
+
+            {% block content %}
+            {% endblock content %}
+
+        </div>
+    </div>
+
+    <!-- Яндекс.Директ -->
+    <div id="ads_line" ng-hide="isMobile">
+        <div id="close_ads"><img src="/.images/close.png" border="0" title="Скрыть рекламу" /></div>
+
+        <!-- Yandex.RTB R-A-32088-1 -->
+        <div id="yandex_rtb_R-A-32088-1"></div>
+        <script>window.yaContextCb.push(()=>{
+          Ya.Context.AdvManager.render({
+            renderTo: 'yandex_rtb_R-A-32088-1',
+            blockId: 'R-A-32088-1'
+          })
+        })</script>
+
+    </div>
+
+    <script type="text/javascript">
+        var extData = {
+            city: {{ city | json }},
+            station: {{ station | json }},
+            stations: {{ stations | json }},
+            history: {{ history | json }}
+            {% if template_type == 'current' %}
+                , current: {{ current | json }}
+            {% endif %}
+        };
+    </script>
+    <script defer type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script defer type="text/javascript" src="/.js/jqueryrotate.2.1.js"></script>
+    <script defer src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js">
+    </script>
+    <script defer src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-sanitize.min.js">
+    </script>
+    <script defer src="/.js/moment-with-locales.min.js"></script>
+    <script defer src="/.js/moment-timezone-with-data-2010-2020.min.js"></script>
+    <script defer src="/.js/highstock.js"></script>
+    <script async src="/.js/social-likes.min.js"></script>
+    <script defer src="/.js/common.js"></script>
+    <script defer src="/.js/{{template_type}}{% if test %}_t{% endif %}.js"></script>
+    <script defer src="/.js/ui.js"></script>
+        <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter32441360 = new Ya.Metrika({ id:32441360, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/32441360" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+
+</body>
+</html>
